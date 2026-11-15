@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1, viewport-fit=cover" name="viewport"/>
+<meta content="#080f1c" name="theme-color"/>
+<title>DevOrchestrate | 5-Slide Presentation</title>
+<style>
+:root {--ink:#071220;--night:#0b1423;--night2:#111f32;--white:#f6f8fa;--muted:#93a6bb;--line:rgba(198,218,237,.17);--lime:#c3f47a;--teal:#6de3d9;--blue:#81a9ff;--orange:#ffbe84;--paper:#f3f5f1;--darktext:#18283a;}
+* {box-sizing:border-box}
+html,body {margin:0;width:100%;height:100%;overflow:hidden;background:#060b12;color:var(--white);font-family:Inter,"Aptos","Segoe UI",system-ui,-apple-system,sans-serif;-webkit-font-smoothing:antialiased}
+button {font:inherit;cursor:pointer}
+#app {position:absolute;inset:0;display:flex;align-items:center;justify-content:center;overflow:hidden;background:radial-gradient(ellipse at 50% 25%,#152436,#060b12 72%)}
+#stage {width:1280px;height:720px;position:absolute;left:50%;top:50%;transform-origin:center center;transform:translate(-50%,-50%) scale(var(--deck-scale,1));overflow:hidden;box-shadow:0 30px 100px #0009;border:1px solid #ffffff11;background:var(--night);}
+.slide {position:absolute;inset:0;overflow:hidden;display:none;padding:58px 72px 50px;background:linear-gradient(128deg,#101e30 0%,#091322 65%,#0b1525 100%)}
+.slide.active{display:block;animation:appear .34s ease both}
+@keyframes appear {from{opacity:.5;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+.slide:before{content:"";position:absolute;inset:-30%;pointer-events:none;background:radial-gradient(circle at 85% 5%,rgba(109,227,217,.1),transparent 30%);}
+.slide.light{background:#f4f5f0;color:var(--darktext)}
+.slide.light:before{background:radial-gradient(circle at 95% 12%,#d3e6e0bb,transparent 38%)}
+.slide.aqua{background:linear-gradient(128deg,#0e302d,#11212c 58%,#0b1525)}
+.slide.indigo{background:linear-gradient(126deg,#171e3f,#0d182c 68%,#0b1323)}
+.slide.ink{background:linear-gradient(125deg,#08111d,#132336 72%,#0b1523)}
+.slide-inner{position:relative;z-index:2;height:100%}
+.brandline{display:flex;align-items:center;justify-content:space-between;margin-bottom:38px;color:#abc0d2;font-weight:700;letter-spacing:.16em;font-size:12px;text-transform:uppercase}
+.brandline .mark{display:flex;align-items:center;gap:9px;color:inherit}
+.brand-glyph{display:inline-flex;align-items:center;justify-content:center;width:25px;height:25px;border-radius:8px;background:var(--lime);color:#102719;font-size:14px;font-weight:950;letter-spacing:-2px}
+.brandline .section{color:var(--teal)}
+.light .brandline{color:#577084}.light .brandline .section{color:#257e7e}
+.slide-foot{position:absolute;left:72px;right:72px;bottom:26px;display:flex;justify-content:space-between;align-items:center;font-size:12px;letter-spacing:.06em;color:#8097ab;z-index:2}
+.light .slide-foot{color:#6f8191}
+.kicker{font-size:13px;text-transform:uppercase;letter-spacing:.2em;color:var(--lime);font-weight:750;margin:0 0 18px}.light .kicker{color:#247c68}
+h1,h2,h3,p{margin-top:0}h1{font-weight:760;font-size:73px;line-height:1.03;letter-spacing:-.065em;margin-bottom:20px}h2{font-size:49px;font-weight:750;letter-spacing:-.05em;line-height:1.08;margin-bottom:17px}h3{font-size:22px;letter-spacing:-.025em;margin-bottom:10px}
+.subtitle{font-size:23px;line-height:1.45;color:#b4c4d3;max-width:830px}.light .subtitle{color:#5a6e7d}
+.small{font-size:15px;line-height:1.5;color:#a5b8c9}.light .small{color:#607587}
+.eyebrow{font-size:12px;letter-spacing:.13em;text-transform:uppercase;font-weight:850;color:#8199ae}
+.accent{color:var(--lime)}.aqua-text{color:var(--teal)}
+.pill{display:inline-flex;align-items:center;gap:8px;border:1px solid #7ea4b255;border-radius:99px;padding:10px 16px;font-size:14px;font-weight:680;color:#c0d8e4;background:#ffffff08}.pill b{color:var(--lime)}
+.grid{display:grid;gap:16px}.grid2{grid-template-columns:repeat(2,minmax(0,1fr))}.grid3{grid-template-columns:repeat(3,minmax(0,1fr))}.grid4{grid-template-columns:repeat(4,minmax(0,1fr))}
+.card{border:1px solid var(--line);border-radius:17px;padding:22px 23px;background:#ffffff09}.card.elevated{background:#ffffff0c;box-shadow:0 14px 32px #0002}
+.light .card{background:#fff;border:1px solid #dfe5e6;box-shadow:0 8px 28px #1b3d4a0b}
+.card p{font-size:16px;line-height:1.48;color:#afc0cf;margin:0}.light .card p{color:#5c7180}
+.card h3{font-size:20px;margin-bottom:9px}
+.dot{display:inline-block;width:9px;height:9px;background:var(--lime);border-radius:50%}
+.num{font-size:15px;font-weight:800;color:var(--lime);letter-spacing:.1em;margin-bottom:12px}
+.light .num{color:#21816f}
+.mono{font-family:ui-monospace,Menlo,Consolas,"SFMono-Regular",monospace}
+.code{background:#050c17;border:1px solid #254058;border-radius:15px;padding:20px 23px;font-family:ui-monospace,Menlo,Consolas,monospace;font-size:15px;line-height:1.62;color:#bdd9ea;white-space:pre-wrap}
+.code em{color:var(--lime);font-style:normal}.code b{color:#84e6d5;font-weight:550}
+.callout{border-left:3px solid var(--lime);background:#c3f47a10;padding:17px 20px;border-radius:0 11px 11px 0;font-size:18px;line-height:1.45;color:#e2f2db}.light .callout{color:#263f38;background:#e6f3e5}
+.divider{height:1px;background:var(--line);margin:18px 0}
+.bullet{display:flex;gap:12px;align-items:flex-start;font-size:17px;line-height:1.42;margin:0 0 13px;color:#c5d2df}.bullet .tick{flex:none;color:var(--lime);font-weight:900;font-size:19px}.light .bullet{color:#324b59}.light .tick{color:#258975}
+.badge{padding:5px 10px;border-radius:7px;background:#a8f29d20;color:#c0f69d;font-size:11px;font-weight:850;letter-spacing:.08em;text-transform:uppercase;border:1px solid #b2eaa033}
+.badge.dim{background:#ffffff11;color:#b4c4d4;border-color:#ffffff20}
+.badge.warn{color:#ffc69c;background:#ffb37615;border-color:#ffb37635}
+.chiprow{display:flex;gap:9px;flex-wrap:wrap}.chip{padding:8px 12px;border:1px solid #ffffff28;background:#ffffff0b;border-radius:8px;font-size:13px;font-weight:620;color:#b5cbd9}
+strong{font-weight:750}
+/* cover */
+.cover .slide-inner{display:flex;flex-direction:column}.cover .hero{padding-top:38px;max-width:1020px;position:relative;z-index:2}.cover h1{font-size:93px;margin-bottom:16px}.cover .hero-sub{font-size:30px;font-weight:440;letter-spacing:-.025em;line-height:1.3;color:#d4e0e9;margin-bottom:30px}.cover .hero-sub strong{color:var(--lime)}
+.cover .orbs{position:absolute;right:-40px;top:115px;width:500px;height:500px;border-radius:50%;border:1px solid #8fe9b936;box-shadow:0 0 0 45px #69d9ad08,0 0 0 95px #69d9ad06,0 0 0 145px #69d9ad03;opacity:.82}
+.cover .orbs:after{content:"";position:absolute;inset:118px;border:2px solid #97fab288;border-radius:50%;box-shadow:0 0 50px #a8f5b626;}
+.cover .flowstrip{position:absolute;left:0;right:0;bottom:57px;display:flex;gap:13px;align-items:center}
+.flowtag{border:1px solid #c1e1e330;border-radius:9px;background:#ffffff0b;padding:14px 21px;font-size:16px;font-weight:680;color:#def3ea}.flowstrip .arrow{color:var(--lime);font-size:24px}
+/* slide 2 */
+.problem-grid{display:grid;grid-template-columns:1.1fr 1fr;gap:28px;margin-top:36px}.problem-list{display:grid;gap:12px}.problem-item{display:flex;gap:17px;align-items:center;background:#ffffff09;border:1px solid var(--line);border-radius:14px;padding:16px 18px}.problem-icon{height:42px;width:42px;display:grid;place-items:center;border-radius:12px;background:#ffbe8417;color:var(--orange);font-size:21px;flex:none}.problem-item strong{font-size:19px;display:block;margin-bottom:3px}.problem-item span{font-size:14px;color:#a2b8c8}.bigquote{display:flex;flex-direction:column;justify-content:center;border:1px solid #bcef9550;background:linear-gradient(135deg,#c3f47a20,#6de3d910);border-radius:24px;padding:40px}.bigquote .quote{font-size:36px;line-height:1.2;letter-spacing:-.045em;font-weight:750}.bigquote p{font-size:17px;color:#bbcec7;margin:20px 0 0}
+/* slide 3 */
+.ownership{display:grid;grid-template-columns:1fr 90px 1fr;align-items:stretch;gap:16px;margin-top:37px}.owner{padding:31px;border-radius:20px;min-height:294px}.owner.human{background:#d7e9df;border:1px solid #b6d5c8}.owner.agent{background:#e7edfa;border:1px solid #ccd9eb}.owner-title{font-size:29px;font-weight:800;letter-spacing:-.035em;margin-bottom:20px}.owner small{font-size:14px;text-transform:uppercase;letter-spacing:.11em;color:#607786;font-weight:800}.owner p{font-size:18px;line-height:1.55;color:#35505c;margin:14px 0}.ownership .vs{font-size:21px;color:#638193;align-self:center;text-align:center;font-weight:850}.principle-strip{margin-top:27px;padding:20px 26px;background:#fff;border:1px solid #e0e6e7;border-radius:16px;display:flex;justify-content:space-between;gap:20px}.principle-strip span{font-size:16px;font-weight:750;color:#315061}
+/* slide 4 workflow */
+.workflow{margin-top:39px;display:grid;gap:13px}.workflow-top,.workflow-bottom{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}.wf-box{border:1px solid #88a2b736;border-radius:17px;padding:21px 17px;min-height:123px;background:#ffffff0b;position:relative}.wf-box .tiny{font-size:12px;letter-spacing:.13em;color:var(--lime);font-weight:800;margin-bottom:10px}.wf-box strong{display:block;font-size:20px;margin-bottom:7px}.wf-box p{font-size:14px;color:#a8bcce;margin:0;line-height:1.36}.wf-box.approval{background:#c3f47a16;border-color:#b2ec8259}.wf-box.approval strong{color:#d5fba8}.wf-connector{height:41px;display:flex;align-items:center;justify-content:center;gap:13px;color:#a5dba1;font-size:15px;font-weight:650}.wf-connector i{width:190px;height:1px;background:linear-gradient(90deg,transparent,#a2d0a4,transparent)}
+/* slide 5 */
+.planner-main{display:grid;grid-template-columns:1fr 1.08fr;gap:22px;margin-top:28px}.process-list{display:grid;gap:12px}.process{border-left:3px solid #9fe5ba;padding:13px 14px;background:#ffffff08;border-radius:0 12px 12px 0}.process strong{display:block;font-size:18px;margin-bottom:5px}.process p{font-size:15px;line-height:1.45;color:#acbecb;margin:0}.files{padding:25px;border-radius:19px;background:#08111e;border:1px solid #557c8555}.file{display:flex;justify-content:space-between;align-items:center;padding:15px 4px;border-bottom:1px solid #ffffff16;font-family:ui-monospace,Menlo,monospace;color:#d8e6ed;font-size:17px}.file:last-child{border-bottom:0}.file span{color:#94cfa7;font-size:13px;font-family:inherit}.file-icon{color:var(--lime);margin-right:11px}
+/* slide 6 */
+.plan-sheet{margin-top:26px;display:grid;grid-template-columns:1.07fr .93fr;gap:19px}.plan-panel{border-radius:17px;border:1px solid #dce5e5;background:#fff;padding:24px}.plan-panel h3{font-size:23px;margin-bottom:13px}.plan-table{width:100%;border-collapse:collapse;font-size:15px;text-align:left}.plan-table th{font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:#718795;padding:9px;border-bottom:2px solid #dee7e5}.plan-table td{padding:12px 9px;border-bottom:1px solid #e7eeee;color:#38505c}.plan-table td:first-child{font-weight:750;color:#243d47}.plan-mini{padding:12px 15px;background:#eef4f1;border-radius:9px;margin-bottom:8px;font-size:15px;color:#345663}.plan-mini strong{color:#214b45}.two-box{display:grid;grid-template-columns:1fr 1fr;gap:9px}.mini-card{border-radius:11px;background:#eef5ef;padding:15px;font-size:14px;color:#365244;min-height:94px}.mini-card.down{background:#fff0e4;color:#654b36}.mini-card strong{display:block;margin-bottom:5px;color:inherit}
+/* slide7 */
+.agents-row{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-top:32px}.agent-card{background:#ffffff0b;border:1px solid var(--line);border-radius:17px;padding:22px;min-height:248px}.agent-card .symbol{display:grid;place-items:center;width:49px;height:49px;border-radius:15px;background:#9cf2c015;color:#beefd5;font-size:26px;margin-bottom:19px}.agent-card h3{font-size:19px;margin-bottom:9px}.agent-card p{font-size:15px;color:#a4b8c7;line-height:1.44}.agent-card code{font-size:12px;color:var(--lime);word-break:break-word}.ribbon{margin-top:22px;padding:16px 22px;border-radius:12px;border:1px solid #c3f47a46;background:#c3f47a10;font-size:17px;color:#d7edc9}
+/* slide8 */
+.steps{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:30px}.step{border-radius:13px;border:1px solid #dae5e3;background:#fff;padding:16px 19px;display:flex;gap:14px;align-items:flex-start}.step .stepn{width:32px;height:32px;display:grid;place-items:center;border-radius:9px;background:#d8eadc;color:#196e59;font-size:15px;font-weight:850;flex:none}.step h3{font-size:17px;margin:0 0 5px}.step p{font-size:14px;line-height:1.4;color:#607482;margin:0}.commandline{display:grid;grid-template-columns:1fr 1fr;gap:13px;margin-top:17px}.command{background:#142337;border-radius:12px;padding:16px 17px;color:#cfdfed;font-size:15px;font-family:ui-monospace,Menlo,Consolas,monospace;line-height:1.44}.command b{color:#b7f5a9;font-weight:650}
+/* slide9 */
+.guard-grid{display:grid;grid-template-columns:1fr 1fr;gap:19px;margin-top:33px}.guard{border:1px solid #ffffff25;background:#ffffff0b;border-radius:18px;padding:24px}.guard h3{font-size:24px;margin-bottom:19px}.guard .bullet{font-size:16px;margin-bottom:14px}.guard.limit{border-color:#ffc48e55;background:#ffc48e0c}.guard.limit h3{color:#ffca98}.guard.limit .tick{color:#ffca98}.guard.allow{border-color:#a3efa65b}.guard.allow h3{color:#b5f0b4}.gate{margin-top:21px;background:#c3f47a17;border:1px solid #c3f47a50;border-radius:14px;padding:17px 23px;display:flex;align-items:center;gap:16px}.gate strong{font-size:19px}.gate span{font-size:16px;color:#bfddc4}
+/* slide10 */
+.end-hero{padding-top:38px}.end-hero h1{font-size:75px;max-width:1050px}.end-hero .tagline{font-size:26px;color:#bfced9;margin:0 0 26px}.end-bottom{display:grid;grid-template-columns:1.15fr .85fr;gap:24px;margin-top:34px}.end-card{border-radius:19px;padding:26px;border:1px solid #91caa856;background:linear-gradient(140deg,#c3f47a15,#6de3d90d)}.end-card h3{font-size:21px}.end-card p{color:#bdd1c7;font-size:16px;line-height:1.5}.takeaways{display:grid;gap:11px}.takeaway{font-size:19px;font-weight:700;color:#d6e7de;padding:12px 15px;border-bottom:1px solid #ffffff23}
+/* Fit the densest slides cleanly within the 16:9 canvas */
+.slide:nth-of-type(3) .brandline{margin-bottom:19px}
+.slide:nth-of-type(3) .ownership{margin-top:18px}
+.slide:nth-of-type(3) .owner{min-height:248px;padding:24px 27px}
+.slide:nth-of-type(3) .owner p{margin:10px 0;font-size:17px}
+.slide:nth-of-type(3) .principle-strip{margin-top:14px;padding:14px 20px}
+.slide:nth-of-type(4) .workflow{margin-top:32px}
+.slide:nth-of-type(5) .brandline{margin-bottom:25px}
+.slide:nth-of-type(5) .planner-main{margin-top:18px}
+.slide:nth-of-type(5) .process-list{gap:9px}
+.slide:nth-of-type(5) .process{padding:10px 12px}
+.slide:nth-of-type(5) .process p{font-size:14px}
+.slide:nth-of-type(6) .brandline{margin-bottom:26px}
+.slide:nth-of-type(6) .plan-sheet{margin-top:16px}
+.slide:nth-of-type(6) .plan-panel{padding:19px}
+.slide:nth-of-type(6) .plan-table td{padding:9px}
+.slide:nth-of-type(7) .brandline{margin-bottom:26px}
+.slide:nth-of-type(7) .agents-row{margin-top:23px}
+.slide:nth-of-type(7) .ribbon{margin-top:14px;padding:12px 20px}
+.slide:nth-of-type(10) .brandline{margin-bottom:17px}
+.slide:nth-of-type(10) .end-hero{padding-top:10px}
+.slide:nth-of-type(10) .end-hero h1{font-size:69px;line-height:1.01}
+.slide:nth-of-type(10) .end-bottom{margin-top:20px}
+.slide:nth-of-type(10) .end-card{padding:20px 24px}
+.slide:nth-of-type(10) .takeaway{padding:10px 14px}
+/* controls */
+#chrome{position:fixed;left:20px;right:20px;bottom:16px;z-index:20;display:flex;align-items:center;justify-content:space-between;gap:20px;pointer-events:none;font-size:13px;color:#b6c9d8}
+#chrome>*{pointer-events:auto}#progressOuter{height:4px;flex:1;max-width:420px;background:#ffffff23;border-radius:99px;overflow:hidden}
+#progress{height:100%;background:linear-gradient(90deg,var(--teal),var(--lime));transition:width .25s ease;width:10%}
+.controls{display:flex;align-items:center;gap:7px;background:#122235dd;border:1px solid #ffffff2a;padding:5px;border-radius:12px;backdrop-filter:blur(12px)}
+.ctrl{display:grid;place-items:center;min-width:36px;height:34px;background:transparent;border:0;border-radius:8px;color:#dfede9;font-size:18px;font-weight:700}.ctrl:hover,.ctrl:focus-visible{background:#ffffff20;outline:1px solid #c4f47a88}.ctrl:disabled{opacity:.3;cursor:not-allowed}
+.counter{font-weight:700;font-size:12px;color:#cbdce8;min-width:45px;text-align:center}
+#shortcuts{display:none;position:fixed;inset:0;background:#000b;z-index:30;align-items:center;justify-content:center}
+#shortcuts.open{display:flex}.help-card{background:#152336;border:1px solid #75aa9f66;border-radius:22px;padding:30px 36px;min-width:420px;box-shadow:0 20px 60px #0008}.help-card h3{font-size:27px}.help-card p{font-size:16px;color:#bbcfdb;line-height:1.8}.kbd{display:inline-block;border:1px solid #ffffff30;border-bottom-width:2px;border-radius:5px;padding:0 6px;background:#ffffff14;color:#e7f1ec;font-family:monospace;font-size:13px}
+@media print{html,body{overflow:visible!important;background:white!important;height:auto!important}#app{display:block!important;position:static!important;overflow:visible!important;background:transparent!important}#stage{position:static!important;left:auto!important;top:auto!important;transform:none!important;width:auto!important;height:auto!important;box-shadow:none!important;border:0!important;overflow:visible!important} .slide,.slide.active{display:block!important;position:relative!important;width:1280px!important;height:720px!important;break-after:page!important;page-break-after:always!important;animation:none!important;-webkit-print-color-adjust:exact;print-color-adjust:exact}#chrome,#shortcuts{display:none!important}@page{size:1280px 720px;margin:0}}
+@media (prefers-reduced-motion:reduce){.slide.active{animation:none}#progress{transition:none}}
+
+
+/* Concise five-slide edition */
+.slide{padding:52px 70px 47px}
+.brandline{margin-bottom:25px}
+.slide-foot{left:70px;right:70px}
+.subtitle{font-size:20px;line-height:1.35}
+h2{font-size:47px}
+.cover .hero{padding-top:9px;max-width:1080px}
+.cover h1{font-size:91px;margin-bottom:10px}
+.cover .hero-sub{font-size:30px;line-height:1.2;margin-bottom:20px}
+.cover .orbs{right:-125px;top:88px;opacity:.65}
+.cover .flowstrip{bottom:43px;gap:10px}
+.cover .flowtag{padding:12px 18px;font-size:15px}
+.cover .intro-points{display:flex;gap:14px;margin-top:24px;max-width:1050px}
+.cover .intro-point{background:#101f31df;border:1px solid #ffffff27;border-radius:13px;padding:17px 18px;width:33%;backdrop-filter:blur(2px)}
+.cover .intro-point b{display:block;font-size:17px;color:#d5f1cb;margin-bottom:6px}
+.cover .intro-point span{font-size:14px;color:#b0c4d1;line-height:1.38;display:block}
+.flow .workflow{margin-top:31px}
+.flow .wf-box{min-height:115px;padding:18px 16px}
+.flow .wf-box strong{font-size:19px}
+.flow .wf-box p{font-size:14px}
+.flow .wf-connector{height:34px}
+.flow .bottom-note{display:flex;justify-content:space-between;gap:16px;margin-top:20px;color:#c9ded3;font-size:14px}
+.flow .bottom-note span{background:#c3f47a11;border:1px solid #c3f47a30;border-radius:9px;padding:10px 13px;flex:1}
+.planner .brandline{margin-bottom:22px}
+.planner .planner-layout{display:grid;grid-template-columns:.9fr 1.1fr;gap:17px;margin-top:22px}
+.planner .plan-process{display:grid;gap:10px}
+.planner .plan-process .card{padding:15px 18px}
+.planner .plan-process .card h3{font-size:17px;margin-bottom:4px;color:#e2f4df}
+.planner .plan-process .card p{font-size:13.5px;line-height:1.4}
+.planner .plan-detail{border-radius:16px;border:1px solid #c3f47a4b;padding:22px 24px;background:#061121e6}
+.planner .plan-detail .eyebrow{margin-bottom:12px;color:#a9d99c}
+.planner .plan-filehead{font-size:25px;font-weight:760;letter-spacing:-.03em;margin-bottom:12px}
+.planner .plan-table2{width:100%;border-collapse:collapse;font-size:14px;margin-bottom:13px}
+.planner .plan-table2 th{text-align:left;color:#93b1bb;font-size:11px;letter-spacing:.12em;text-transform:uppercase;padding:10px 8px;border-bottom:1px solid #ffffff2b}
+.planner .plan-table2 td{padding:11px 8px;color:#d9e8eb;border-bottom:1px solid #ffffff15}
+.planner .plan-table2 td:nth-child(2){color:#c6efac;font-weight:700}
+.planner .proscons{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.planner .proscons>div{padding:12px 13px;border-radius:9px;background:#c3f47a10;color:#bedccb;font-size:13px;line-height:1.35}
+.planner .proscons>div:last-child{background:#ffbe840f;color:#f5d4b6}
+.planner .proscons b{display:block;color:#e2f5cb;margin-bottom:4px;font-size:14px}
+.planner .proscons>div:last-child b{color:#ffd4a5}
+.planner .plan-note{margin-top:11px;color:#9db7bd;font-size:12.5px;line-height:1.38}
+.agents .agents-row{margin-top:25px}
+.agents .agent-card{min-height:226px;padding:20px}
+.agents .agent-card p{font-size:14px;line-height:1.42}
+.agents .agent-card .symbol{margin-bottom:12px}
+.agents .ribbon{margin-top:15px;padding:13px 19px;font-size:16px}
+.agents .subribbon{margin-top:9px;color:#b5c7d8;font-size:14px}
+.howto .brandline{margin-bottom:22px}
+.howto .steps{margin-top:21px;gap:10px}
+.howto .step{padding:11px 15px;min-height:70px}
+.howto .step h3{font-size:16px;margin:0 0 4px}
+.howto .step p{font-size:13px;line-height:1.3}
+.howto .commandline{margin-top:14px;gap:10px}
+.howto .command{padding:13px 15px;font-size:12.7px;line-height:1.45}
+.howto .guard-strip{display:flex;gap:8px;margin-top:10px}
+.howto .guard-strip span{background:#dbe9e1;border:1px solid #c1d9ca;border-radius:8px;padding:7px 12px;font-size:12px;font-weight:700;color:#265446}
+/* Overwrite legacy positional density overrides after the new slide ordering */
+.slide:nth-of-type(3) .brandline,.slide:nth-of-type(4) .brandline,.slide:nth-of-type(5) .brandline{margin-bottom:22px}
+.slide:nth-of-type(4) .agents-row{margin-top:25px}
+.slide:nth-of-type(5) .planner-main{margin-top:0}
+@media print{.slide{padding:52px 70px 47px!important}}
+</style>
+</head>
+<body>
+<div id="app"><main aria-label="DevOrchestrate five-slide deck" id="stage"><section aria-label="Slide 1 of 5: Introduction" class="slide cover ink active" data-title="Introduction">
+<div class="slide-inner"><div class="brandline"><span class="mark"><span class="brand-glyph">D</span> DEVORCHESTRATE</span><span class="section">A developer-first agentic SDLC</span></div>
+<div aria-hidden="true" class="orbs"></div>
+<div class="hero"><p class="kicker">Introducing DevOrchestrate</p>
+<h1>Dev<span class="accent">Orchestrate.</span></h1>
+<p class="hero-sub"><strong>Human-Led.</strong> Agent-Powered Development.</p>
+<p class="subtitle">A reusable, workspace-aware development workflow: from a clear specification to reviewed and tested code—with the developer in control.</p>
+<div class="intro-points">
+<div class="intro-point"><b>Reuse before rewrite</b><span>Agents inspect real classes, methods, conventions and existing test assets.</span></div>
+<div class="intro-point"><b>Plans before code</b><span>Compare feasible approaches, technical impact, benefits and trade-offs.</span></div>
+<div class="intro-point"><b>Approval at every gate</b><span>The human selects scope, phases, fixes and PR actions.</span></div>
+</div>
+</div>
+<div class="flowstrip"><span class="flowtag">SPEC</span><span class="arrow">→</span><span class="flowtag">PLAN</span><span class="arrow">→</span><span class="flowtag">BUILD</span><span class="arrow">→</span><span class="flowtag">VERIFY</span><span class="arrow">→</span><span class="flowtag">PR</span></div>
+</div><div class="slide-foot"><span>WORKS THROUGH PORTABLE INSTRUCTIONS + PLATFORM-SPECIFIC ADAPTERS</span><span>01 / 05</span></div>
+</section><section aria-label="Slide 2 of 5: End-to-end workflow" class="slide aqua flow" data-title="The flow">
+<div class="slide-inner"><div class="brandline"><span class="mark"><span class="brand-glyph">D</span> DEVORCHESTRATE</span><span class="section">01 / Workflow</span></div>
+<p class="kicker">Developer-controlled lifecycle</p><h2>One flow. <span class="accent">Human checkpoints.</span></h2>
+<p class="subtitle">Every stage is available on demand; no automatic agent-to-agent handoff.</p>
+<div class="workflow"><div class="workflow-top">
+<div class="wf-box"><div class="tiny">01 / HUMAN</div><strong>spec.md</strong><p>Requirements, ACs and constraints</p></div>
+<div class="wf-box"><div class="tiny">02 / PLANNER</div><strong>Plan A…Z</strong><p>Only distinct options, backed by workspace evidence</p></div>
+<div class="wf-box approval"><div class="tiny">03 / HUMAN GATE</div><strong>Select plan</strong><p>Approve, revise, reject or combine</p></div>
+<div class="wf-box"><div class="tiny">04 / DEVELOPER</div><strong>Implement</strong><p>Only approved phases; report real changes</p></div>
+</div><div class="wf-connector"><i></i><span>Human decides when to continue ↓</span><i></i></div><div class="workflow-bottom">
+<div class="wf-box"><div class="tiny">05 / REVIEWER</div><strong>Review</strong><p>File-specific findings in comments.md</p></div>
+<div class="wf-box"><div class="tiny">06 / TESTERS</div><strong>Verify</strong><p>Unit + integration evidence, where applicable</p></div>
+<div class="wf-box approval"><div class="tiny">07 / HUMAN GATE</div><strong>Approve PR</strong><p>Validate results and select branches</p></div>
+<div class="wf-box"><div class="tiny">08 / PR AGENT</div><strong>Prepare / create</strong><p>Creates PR only when authorized</p></div>
+</div></div>
+<div class="bottom-note"><span>Human authority: choose agents, phases and which findings to fix</span><span>Agent duty: explain evidence, risks, blockers and actual results</span></div>
+</div><div class="slide-foot"><span>HUMAN DECIDES WHAT &amp; WHEN • AGENTS PROPOSE HOW</span><span>02 / 05</span></div>
+</section><section aria-label="Slide 3 of 5: Planner and implementation blueprint" class="slide planner" data-title="Planner and Plan A">
+<div class="slide-inner"><div class="brandline"><span class="mark"><span class="brand-glyph">D</span> DEVORCHESTRATE</span><span class="section">02 / Planner + plan anatomy</span></div>
+<p class="kicker">From spec.md to executable blueprint</p><h2>The Planner makes the <span class="accent">design actionable.</span></h2>
+<div class="planner-layout"><div class="plan-process">
+<div class="card"><h3>01 · Discover the workspace</h3><p>Read spec.md; inspect architecture, existing files, method signatures, dependencies and tests.</p></div>
+<div class="card"><h3>02 · Prioritize safe reuse</h3><p>Identify reusable classes and utilities; justify every new component or refactor.</p></div>
+<div class="card"><h3>03 · Generate only real choices</h3><p>PlanA.md to PlanZ.md if warranted; one plan if that is the only sound option.</p></div>
+<div class="card"><h3>04 · Compare and wait</h3><p>Document design, code changes, phases, risks, rollback, merits/demerits and AC coverage. Human selects.</p></div>
+</div><div class="plan-detail">
+<div class="eyebrow">plans / PlanA.md · Illustrative Java example</div>
+<div class="plan-filehead">Class-level implementation impact</div>
+<table class="plan-table2"><thead><tr><th>Component</th><th>Action</th><th>Why</th></tr></thead><tbody>
+<tr><td>AuthenticationService</td><td>REUSE</td><td>Preserve existing login logic</td></tr>
+<tr><td>SecurityConfig</td><td>MODIFY</td><td>Add role authorization rules</td></tr>
+<tr><td>UserController</td><td>MODIFY</td><td>Protect selected endpoints</td></tr>
+<tr><td>PermissionEvaluator*</td><td>CREATE</td><td>Only if no suitable abstraction exists</td></tr>
+</tbody></table>
+<div class="proscons"><div><b>Benefits</b>Smaller changes, code reuse, lower short-term risk.</div><div><b>Demerits</b>May retain existing architectural limitations.</div></div>
+<div class="plan-note">Each plan also needs method contracts, code-level design, phases, test cases, acceptance criteria mapping, dependencies and rollback. Existing components must be verified—not guessed.</div>
+</div></div>
+</div><div class="slide-foot"><span>PLANNING OUTPUT: PlanA.md + comparison.md + selection.md</span><span>03 / 05</span></div>
+</section><section aria-label="Slide 4 of 5: Specialized agents and validation" class="slide indigo agents" data-title="Agents and quality">
+<div class="slide-inner"><div class="brandline"><span class="mark"><span class="brand-glyph">D</span> DEVORCHESTRATE</span><span class="section">03 / Execution + quality</span></div>
+<p class="kicker">Specialized agents</p><h2>Defined responsibilities. <span class="accent">Verifiable output.</span></h2>
+<p class="subtitle">Agents act against the selected plan—not against their own unapproved redesign.</p>
+<div class="agents-row">
+<div class="agent-card"><div class="symbol">⌘</div><h3>Developer</h3><p>Builds approved phases, reuses existing code, executes build checks and records changes.</p><div class="divider"></div><code>development-report.md</code></div>
+<div class="agent-card"><div class="symbol">◎</div><h3>Code Reviewer</h3><p>Checks requirements, security and maintainability; returns precise, actionable findings.</p><div class="divider"></div><code>comments.md</code></div>
+<div class="agent-card"><div class="symbol">✓</div><h3>Unit Tester</h3><p>Adds meaningful unit tests; records executed results and available coverage.</p><div class="divider"></div><code>unit-test-report.md</code></div>
+<div class="agent-card"><div class="symbol">⇆</div><h3>Integration Tester</h3><p>Verifies API, UI, DB and E2E boundaries where applicable; documents blockers.</p><div class="divider"></div><code>integration-test-report.md</code></div>
+</div>
+<div class="ribbon"><strong>PR Agent:</strong> Produces readiness summary and PR details; creates the PR only after human approval.</div>
+<div class="subribbon">No auto-chaining • No silent scope changes • No invented test passes • No unauthorized commits, push, PRs or deployments</div>
+</div><div class="slide-foot"><span>REPORT PASS / FAIL / BLOCKED WITH REAL EVIDENCE</span><span>04 / 05</span></div>
+</section><section aria-label="Slide 5 of 5: How to use DevOrchestrate" class="slide light howto" data-title="How to use OpenCode">
+<div class="slide-inner"><div class="brandline"><span class="mark"><span class="brand-glyph">D</span> DEVORCHESTRATE</span><span class="section">04 / Practical usage</span></div>
+<p class="kicker">OpenCode example · Works with other coding agents through adapters</p><h2>Open workspace. <span style="color:#218b72">Launch Planner.</span></h2>
+<div class="steps">
+<div class="step"><span class="stepn">1</span><div><h3>Install once</h3><p>Run the master setup prompt in Build mode; verify agent files.</p></div></div>
+<div class="step"><span class="stepn">2</span><div><h3>Write spec.md</h3><p>Add requirements, acceptance criteria and constraints.</p></div></div>
+<div class="step"><span class="stepn">3</span><div><h3>Launch Planner</h3><p>Review Plan A/B, comparison and class-level impact.</p></div></div>
+<div class="step"><span class="stepn">4</span><div><h3>Approve + implement</h3><p>Select Plan A, then ask Developer for Phase 1 only.</p></div></div>
+<div class="step"><span class="stepn">5</span><div><h3>Review + test</h3><p>Invoke agents separately; approve targeted corrections.</p></div></div>
+<div class="step"><span class="stepn">6</span><div><h3>PR on your terms</h3><p>Inspect evidence, choose branches and authorize creation.</p></div></div>
+</div>
+<div class="commandline"><div class="command"><b>&gt;</b> Launch Planner. Read spec.md, inspect the workspace, create feasible plans under plans/. Do not modify code.</div><div class="command"><b>&gt;</b> Launch Developer. Implement approved Plan A, Phase 1 only. Verify and stop for my review.</div></div>
+<div class="guard-strip"><span>Human approves scope</span><span>Human selects plan</span><span>Human authorizes PR</span><span>Agent reports evidence</span></div>
+</div><div class="slide-foot"><span>DEVORCHESTRATE — HUMAN-LED. AGENT-POWERED.</span><span>05 / 05</span></div>
+</section></main></div>
+<div aria-label="Presentation controls" id="chrome"><div aria-hidden="true" id="progressOuter"><div id="progress" style="width:20%"></div></div><div class="controls"><button aria-label="Previous slide" class="ctrl" id="prev" title="Previous slide (←)">‹</button><span class="counter" id="counter">01 / 05</span><button aria-label="Next slide" class="ctrl" id="next" title="Next slide (→)">›</button><button aria-label="Toggle fullscreen" class="ctrl" id="fullscreen" title="Fullscreen (F)">⛶</button><button aria-label="Show keyboard shortcuts" class="ctrl" id="help" title="Help (?)">?</button></div></div>
+<div aria-label="Presentation keyboard shortcuts" aria-modal="true" id="shortcuts" role="dialog"><div class="help-card"><h3>Presentation controls</h3><p><span class="kbd">→</span> / <span class="kbd">Space</span>   Next slide<br/><span class="kbd">←</span>   Previous slide<br/><span class="kbd">Home</span> / <span class="kbd">End</span>   First / last<br/><span class="kbd">F</span>   Toggle fullscreen<br/><span class="kbd">Esc</span>   Close help<br/>Swipe left or right on mobile.</p><button class="ctrl" id="closehelp" style="width:100%;background:#c3f47a;color:#163022;margin-top:8px">Close</button></div></div>
+<script>
+(function () {
+  'use strict';
+  const slides=[...document.querySelectorAll('.slide')];
+  const N=slides.length;
+  const prev=document.getElementById('prev'),next=document.getElementById('next');
+  const counter=document.getElementById('counter'),progress=document.getElementById('progress');
+  const shortcuts=document.getElementById('shortcuts');
+  let index=Math.max(0,Math.min(N-1,Number.parseInt(location.hash.replace('#',''),10)-1||0));
+  function fit(){let scale=Math.min((innerWidth-28)/1280,(innerHeight-66)/720,1.65);document.getElementById('stage').style.setProperty('--deck-scale',Math.max(.1,scale));}
+  function show(i){index=Math.min(N-1,Math.max(0,i));slides.forEach((s,j)=>{s.classList.toggle('active',j===index);s.setAttribute('aria-hidden',j===index?'false':'true');});counter.textContent=String(index+1).padStart(2,'0')+' / '+String(N).padStart(2,'0');progress.style.width=((index+1)/N*100)+'%';prev.disabled=index===0;next.disabled=index===N-1;document.title='DevOrchestrate · '+slides[index].dataset.title+' ('+(index+1)+'/'+N+')';if(location.hash!=='#'+(index+1))history.replaceState(null,'','#'+(index+1));}
+  prev.addEventListener('click',()=>show(index-1));next.addEventListener('click',()=>show(index+1));
+  document.getElementById('fullscreen').addEventListener('click',()=>{if(document.fullscreenElement){document.exitFullscreen?.()}else{document.documentElement.requestFullscreen?.()}});
+  function hideHelp(){shortcuts.classList.remove('open')};
+  document.getElementById('help').addEventListener('click',()=>shortcuts.classList.add('open'));
+  document.getElementById('closehelp').addEventListener('click',hideHelp);
+  shortcuts.addEventListener('click',e=>{if(e.target===shortcuts)hideHelp()});
+  document.addEventListener('keydown',e=>{if(shortcuts.classList.contains('open')){if(e.key==='Escape')hideHelp();return;}if(['ArrowRight','PageDown',' '].includes(e.key)){e.preventDefault();show(index+1)}else if(['ArrowLeft','PageUp'].includes(e.key)){e.preventDefault();show(index-1)}else if(e.key==='Home'){show(0)}else if(e.key==='End'){show(N-1)}else if(e.key.toLowerCase()==='f'){document.getElementById('fullscreen').click()}else if(e.key==='?'){shortcuts.classList.add('open')}});
+  let touchX=null,touchY=null;
+  document.addEventListener('touchstart',e=>{if(e.touches.length===1){touchX=e.touches[0].clientX;touchY=e.touches[0].clientY}},{passive:true});
+  document.addEventListener('touchend',e=>{if(touchX===null)return;const dx=e.changedTouches[0].clientX-touchX,dy=e.changedTouches[0].clientY-touchY;if(Math.abs(dx)>55&&Math.abs(dx)>Math.abs(dy)*1.3)show(index+(dx<0?1:-1));touchX=touchY=null},{passive:true});
+  addEventListener('resize',fit);addEventListener('hashchange',()=>{let s=parseInt(location.hash.slice(1),10);if(Number.isFinite(s))show(s-1)});
+  fit();show(index);
+})();
+</script>
+</body>
+</html>
